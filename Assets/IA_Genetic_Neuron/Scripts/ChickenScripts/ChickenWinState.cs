@@ -10,11 +10,17 @@ public class ChickenWinState : MonoBehaviour
     [SerializeField] private float _distanceBetweenGroundAndDeath; // distance d'écart entre le parcours et la zone d'élimination
     [SerializeField] private float _groundAltitude; // altitude de la zone de parcours
 
+    private ChickenManager _chickenManager; // manager de poulets
+    private UIManager _uiManager; // UI
+
     private void Start()
     {
         hasReachedGoal = false;
         isAlive = true;
         _deathDistance = _groundAltitude - _distanceBetweenGroundAndDeath;
+        // Accès au manager
+        _chickenManager = GameObject.Find("ChickenManager").GetComponent<ChickenManager>();
+        _uiManager = GameObject.Find("UIManager").GetComponent<UIManager>();
     }
 
     private void Update()
@@ -29,6 +35,10 @@ public class ChickenWinState : MonoBehaviour
     private void CheckAltitude()
     {
         if(transform.position.y <= _deathDistance && isAlive)
+        {
             isAlive = false;
+            _chickenManager.currentChickenAmount--;
+            _uiManager.SetChickenCountUI();
+        }
     }
 }

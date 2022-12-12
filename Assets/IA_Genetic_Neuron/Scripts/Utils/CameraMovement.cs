@@ -6,10 +6,17 @@ using UnityEngine;
 public class CameraMovement : MonoBehaviour
 {
     [SerializeField] private float _speed;
+    [SerializeField] private float _endPositionZ; // Arrêt de la caméra après avoir dépassé une certaine valeur sur l'axe z
+
+    private void Start()
+    {
+    }
 
     void Update()
     {
         MoveCamera();
+        if(transform.position.z >= _endPositionZ)
+            enabled = false;
     }
 
     // Mouvement de la caméra

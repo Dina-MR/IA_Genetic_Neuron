@@ -811,9 +811,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a497fe73065f249b9d97d696398c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 3
+  _speed: 10
   distanceTravelled: 0
   timer: 0
+  maxPathSize: 0
 --- !u!114 &5603328557186918762
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,6 +831,7 @@ MonoBehaviour:
   isAlive: 0
   _distanceBetweenGroundAndDeath: 10
   _groundAltitude: 0
+  _manager: {fileID: 4564077453284871996, guid: 8f73dc6c8bf06a743800684ecb0e39ab, type: 3}
 --- !u!1 &9016087692580001070
 GameObject:
   m_ObjectHideFlags: 0

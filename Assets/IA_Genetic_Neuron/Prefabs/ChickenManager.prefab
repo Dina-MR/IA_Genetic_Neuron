@@ -1,0 +1,70 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4564077453284871998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4564077453284871999}
+  - component: {fileID: 4564077453284871996}
+  - component: {fileID: 4564077453284871938}
+  m_Layer: 0
+  m_Name: ChickenManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4564077453284871999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564077453284871998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.33295143, y: 6.0838785, z: -1.0135007}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4564077453284871996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564077453284871998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee23bd134ffd03d43bbdc8a7909853bd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  generationNumber: 1
+  currentChickenAmount: -18
+  chickenList: []
+--- !u!114 &4564077453284871938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4564077453284871998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c7937b380a023540aaf1a1e0ddd9b5b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chickenManager: {fileID: 4564077453284871996}
+  _chickenAsset: {fileID: 9016051191653165362, guid: 3cc28886f3e74f0459ca15fc409fb39a, type: 3}
+  _initialChickenAmount: 20
+  _minimumX: -8
+  _maximumX: 8
+  _positionY: 1
+  _positionZ: -23
+  _maxDirectionsAmount: 10

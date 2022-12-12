@@ -18,10 +18,15 @@ public class ChickenGenerator : MonoBehaviour
     [SerializeField] private float _positionY;
     [SerializeField] private float _positionZ; // Position de départ
 
+    [Header("Others")]
+    [SerializeField] private int _maxDirectionsAmount; // Nombre maximum de directions empruntées par un poulet
+
     private void Start()
     {
+        // Initialisation du manager
         chickenManager.currentChickenAmount = _initialChickenAmount;
         chickenManager.chickenList = new List<GameObject>();
+        // Création de la 1ère génération
         GenerateFirstGeneration();
     }
 
@@ -45,6 +50,8 @@ public class ChickenGenerator : MonoBehaviour
     {
         GameObject chicken = Instantiate(_chickenAsset, RandomizePosition(), Quaternion.identity);
         chicken.name = NameChicken(chickenId);
+        chicken.GetComponent<ChickenMove>().maxPathSize = _maxDirectionsAmount;
+        chicken.GetComponent<ChickenMove>().SetupRandomDirections();
         return chicken;
     }
 
