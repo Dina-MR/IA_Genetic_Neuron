@@ -20,8 +20,10 @@ public class ChickenMove : MonoBehaviour
         { "Forward", Vector3.forward }
     };
     private List<string> _directionsList = new List<string>(_directionsDictionary.Keys);
+    private ChickenGenetic _genetics;
     public Queue<string> _path = new Queue<string>(); // chemin obtenu à partir d'un ensemble de directions
-    public int maxPathSize;
+    public int maxPathSize; // Maximum amount of (generated) directions, before the queue gets reseted
+    private int _pathInitialSize; // The initial amount of directions in the path DNA
 
     private ChickenWinState _winState;
 
@@ -33,6 +35,11 @@ public class ChickenMove : MonoBehaviour
         previousPosition = transform.position;
         // Accès au vérificateur de victoire
         _winState = gameObject.GetComponent<ChickenWinState>();
+        _genetics = gameObject.GetComponent<ChickenGenetic>();
+        _pathInitialSize = _genetics.pathDNA.Count;
+        // Mise à jour du chemin si l'ADN est établi
+        if(_pathInitialSize > 0)
+            SetupEstablishedDirections();
     }
 
     private void Update()
@@ -70,10 +77,20 @@ public class ChickenMove : MonoBehaviour
         }
     }
 
+    // Récupération des directions de l'ADN (à partir de la 2ème génération)
+    public void SetupEstablishedDirections()
+    {
+        for (int i = 0; i < _pathInitialSize; i++)
+            _path.Enqueue(_genetics.pathDNA[i]);
+    }
+
     // Application de la direction en tête de file chez le poulet
     private Vector3 PickNextDirection()
     {
         string nextDirection = _path.Dequeue();
+        // Adding the direction in the DNA, unless it's already inside it
+        if(_pathInitialSize == 0 || _genetics.pathDNA.Count > _pathInitialSize)
+            _genetics.pathDNA.Add(nextDirection);
         return _directionsDictionary[nextDirection];
     }
 

@@ -45,13 +45,18 @@ public class ChickenGenerator : MonoBehaviour
      * Fonctions utilitaires
      */
 
-    // Création d'un poulet
-    private GameObject GenerateChicken(int chickenId)
+    // Chicken creation
+    public GameObject GenerateChicken(int chickenId, List<string> DNA = null)
     {
         GameObject chicken = Instantiate(_chickenAsset, RandomizePosition(), Quaternion.identity);
         chicken.name = NameChicken(chickenId);
         chicken.GetComponent<ChickenMove>().maxPathSize = _maxDirectionsAmount;
-        chicken.GetComponent<ChickenMove>().SetupRandomDirections();
+        // For the 1st generation
+        if (DNA == null)
+            chicken.GetComponent<ChickenMove>().SetupRandomDirections();
+        // For the next generations
+        else
+            chicken.GetComponent<ChickenGenetic>().pathDNA = DNA;
         return chicken;
     }
 

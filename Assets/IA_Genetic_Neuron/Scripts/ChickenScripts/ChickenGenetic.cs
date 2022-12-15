@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 /// <summary>
@@ -10,12 +11,14 @@ public class ChickenGenetic : MonoBehaviour
     public float _fitnessScore; // Fitness score, used to select the best chicken
     [SerializeField] private float _mutationRate = 0.01f; // The chance a chicken will mutate
     private bool _canMutate; // The ability or not for a chicken to mutate
-    [HideInInspector] public Queue<string> pathDNA; // The path followed by the chicken is considered to be its DNA
+    [HideInInspector] public List<string> pathDNA; // The path followed by the chicken is considered to be its DNA
+    [HideInInspector] public Queue<string> currentPathDNA; // The current path generated. It'll reset itself when it gets empty
     private ChickenMove _chickenMoveData;
 
     // Start is called before the first frame update
     void Start()
     {
+        pathDNA = new List<string>();
         _chickenMoveData = gameObject.GetComponent<ChickenMove>();
         DetermineMutation();
     }
@@ -40,21 +43,30 @@ public class ChickenGenetic : MonoBehaviour
     /// <summary>
     /// Get the DNA of the chicken after the race is over
     /// </summary>
-    public void GetPathDNA()
-    {
-        pathDNA = _chickenMoveData._path;
-    }
+    //public void GetPathDNA()
+    //{
+    //    currentPathDNA = _chickenMoveData._path;
+    //}
 
-    public Queue<string> Crossbreed(GameObject partner)
+    public List<string> Crossbreed(GameObject partner)
     {
-        Queue<string> newDNA = new Queue<string>();
-        Queue<string> partnerDNA = partner.GetComponent<ChickenGenetic>().pathDNA;
+        List<string> newDNA = new List<string>();
+        List<string> partnerDNA = partner.GetComponent<ChickenGenetic>().pathDNA;
+        int shortestDNASize = Math.Min(pathDNA.Count, partnerDNA.Count);
+        int randomDNAPickerLimit = UnityEngine.Random.Range(0, shortestDNASize); // we randomly choose which DNA will get its fragment picked, for each position of the new DNA
+        for(int i = 0; i < shortestDNASize; i++)
+        {
+            if (i <= randomDNAPickerLimit)
+                newDNA.Add(pathDNA[i]);
+            else
+                newDNA.Add(partnerDNA[i]);
+        }
         return newDNA;
     }
 
     public void DetermineMutation()
     {
-        float randomValueForMutation = Random.Range(0, 1);
+        float randomValueForMutation = UnityEngine.Random.Range(0, 1);
         if (randomValueForMutation <= _mutationRate)
             _canMutate = true;
         else

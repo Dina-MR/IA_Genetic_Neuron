@@ -723,6 +723,7 @@ GameObject:
   - component: {fileID: 95943283471612896}
   - component: {fileID: 95943283471612894}
   - component: {fileID: 5603328557186918762}
+  - component: {fileID: 352911393975055774}
   m_Layer: 6
   m_Name: Chicken
   m_TagString: Chicken
@@ -831,7 +832,21 @@ MonoBehaviour:
   isAlive: 0
   _distanceBetweenGroundAndDeath: 10
   _groundAltitude: 0
-  _manager: {fileID: 4564077453284871996, guid: 8f73dc6c8bf06a743800684ecb0e39ab, type: 3}
+--- !u!114 &352911393975055774
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9016051191653165362}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4b3fa595d4cd6a44a30876595f7dc8a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _fitnessScore: 0
+  _mutationRate: 0.01
+  pathDNA: []
 --- !u!1 &9016087692580001070
 GameObject:
   m_ObjectHideFlags: 0
