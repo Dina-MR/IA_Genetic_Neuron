@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Linq;
 using UnityEngine;
 using TMPro;
 
+/// <summary>
+/// Manage everything related to the chicken. It's specifically used to switch between generations.
+/// </summary>
 public class ChickenManager : MonoBehaviour
 {
     [HideInInspector] public int generationNumber = 1;
@@ -14,7 +18,8 @@ public class ChickenManager : MonoBehaviour
     [Header("Winners parameters")]
     [SerializeField] private int _winnerBonus = 2;
     [SerializeField] private int _selectedChickenCount; // Number of chicken selected for breeding
-    [SerializeField, Range(1, 2)] private int _childrenPerWinners = 2;
+    [SerializeField, Range(1, 4)] private int _childrenPerWinners = 2;
+
     private void Start()
     {
         _generator = gameObject.GetComponent<ChickenGenerator>();
@@ -25,10 +30,12 @@ public class ChickenManager : MonoBehaviour
     /// </summary>
     public void SetupNextGeneration()
     {
+        generationNumber++;
         CalculateAllScores();
         SortByFitnessScores();
-        chickenList = CrossbreedWinners(SelectWinners());
-        generationNumber++;
+        List<GameObject> nextGeneration = CrossbreedWinners(SelectWinners());
+        DeletePreviousGeneration();
+        chickenList = nextGeneration;
         currentChickenAmount = chickenList.Count;
     }
 
@@ -48,14 +55,18 @@ public class ChickenManager : MonoBehaviour
     }
 
     /// <summary>
-    /// Sort the chicken by their fitness score
+    /// Sort the chicken by their fitness score, from hightest to lowest
     /// </summary>
     public void SortByFitnessScores()
     {
-        chickenList.Sort(delegate(GameObject chickenA, GameObject chickenB)
+        // Sort in ascending order
+        chickenList.Sort(delegate (GameObject chickenA, GameObject chickenB)
         {
             return (chickenA.GetComponent<ChickenGenetic>()._fitnessScore).CompareTo(chickenB.GetComponent<ChickenGenetic>()._fitnessScore);
+            //return (int)(chickenA.GetComponent<ChickenGenetic>()._fitnessScore - chickenB.GetComponent<ChickenGenetic>()._fitnessScore);
         });
+        // Then reverse the list
+        chickenList.Reverse();
     }
 
     /// <summary>
@@ -66,7 +77,10 @@ public class ChickenManager : MonoBehaviour
     {
         List<GameObject> selection = new List<GameObject>();
         for (int i = 0; i < _selectedChickenCount; i++)
+        {
+            Debug.Log("Fitness score n° " + i + " = " + chickenList[i].gameObject.GetComponent<ChickenGenetic>()._fitnessScore);
             selection.Add(chickenList[i]);
+        }
         return selection;
     }
 
@@ -79,15 +93,22 @@ public class ChickenManager : MonoBehaviour
     /// <param name="winners"></param>
     public List<GameObject> CrossbreedWinners(List<GameObject> winners)
     {
+        //Debug.Log("Number of winners :" + winners.Count);
         List<GameObject> nextGeneration = new();
         int lastIndex = winners.Count - 1;
+        int id = 0;
+        //Debug.Log("First half of winners ends with chicken n°" + (winners.Count / 2 - 1));
         for (int i = 0; i <= winners.Count / 2 - 1; i++)
         {
+            //Debug.Log("Couple n°" + i);
+            //Debug.Log("Partner id is " + (lastIndex - 1 - i));
             // Crossbreeding
             for(int j = 0; j < _childrenPerWinners; j++)
             {
-                List<string> newDNA = winners[i].GetComponent<ChickenGenetic>().Crossbreed(winners[lastIndex - 1]);
-                nextGeneration.Add(_generator.GenerateChicken(newDNA.Count, newDNA));
+                //Debug.Log("Creating child n° " + j);
+                List<string> newDNA = winners[i].GetComponent<ChickenGenetic>().Crossbreed(winners[lastIndex - 1 - i]);
+                nextGeneration.Add(_generator.GenerateChicken(id, newDNA, winners[i], winners[lastIndex - 1 - i]));
+                id++;
             }
         }
         return nextGeneration;

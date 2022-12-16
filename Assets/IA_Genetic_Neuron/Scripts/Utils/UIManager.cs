@@ -15,6 +15,14 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
+        UpdateUI();
+    }
+
+    /// <summary>
+    /// Updating UI. It's called at the start of the simulation and each time a new generation will start the race.
+    /// </summary>
+    public void UpdateUI()
+    {
         SetGenerationUI();
         SetChickenCountUI();
         SetWinnersCountUI();

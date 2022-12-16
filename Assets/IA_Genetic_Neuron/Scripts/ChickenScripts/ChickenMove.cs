@@ -7,10 +7,11 @@ using UnityEngine;
 
 public class ChickenMove : MonoBehaviour
 {
-    [SerializeField] private float _speed; // vitesse du poulet
-    public float distanceTravelled; // distance totale parcourue
-    public float timer; // temps total parcouru
-    private Vector3 previousPosition; // position précédente du poulet, utilisée pour le calcul de distance
+    [SerializeField] private float _speed; // Speed of the chicken
+    public float distanceTravelled; // Distance travelled by the chicken from the beginning to the end of its race
+    public float timer; // How much time the chicken travelled until the end
+    private Vector3 previousPosition; // Previous position. It's used to calculate the distance
+    public Vector3 startingPosition; // Position at the beginning of the run
 
     // Directions pour le gène
     static private Dictionary<string, Vector3> _directionsDictionary = new Dictionary<string, Vector3>()
@@ -21,7 +22,7 @@ public class ChickenMove : MonoBehaviour
     };
     private List<string> _directionsList = new List<string>(_directionsDictionary.Keys);
     private ChickenGenetic _genetics;
-    public Queue<string> _path = new Queue<string>(); // chemin obtenu à partir d'un ensemble de directions
+    public Queue<string> _path = new Queue<string>(); // Path made of multiple directions
     public int maxPathSize; // Maximum amount of (generated) directions, before the queue gets reseted
     private int _pathInitialSize; // The initial amount of directions in the path DNA
 
@@ -29,17 +30,18 @@ public class ChickenMove : MonoBehaviour
 
     private void Start()
     {
-        // Initialisation des paramètres de course
+        // Initilization of race parameters
         distanceTravelled = 0f;
         timer = 0f;
         previousPosition = transform.position;
-        // Accès au vérificateur de victoire
+        // Access to other components (winning state and genetics)
         _winState = gameObject.GetComponent<ChickenWinState>();
         _genetics = gameObject.GetComponent<ChickenGenetic>();
         _pathInitialSize = _genetics.pathDNA.Count;
-        // Mise à jour du chemin si l'ADN est établi
+        // Update on the path, but only if the DNA has been established (only the 1st isn't concerned by this)
         if(_pathInitialSize > 0)
             SetupEstablishedDirections();
+        startingPosition = gameObject.transform.position;
     }
 
     private void Update()
@@ -56,18 +58,18 @@ public class ChickenMove : MonoBehaviour
         }
     }
 
-    // Mouvement simple en avant
+    // Moving toward the goal. The chicken can go to the left, to the right or forward
     private void Move()
     {
         float step = this._speed * Time.deltaTime;
-        // Réinitialisation du chemin lorsque qu'il n'y a plus de directions à prendre
+        // Regeneration of a path if the queue containing the temporary path is empty
         if (_path.Count == 0)
             SetupRandomDirections();
         else
             gameObject.transform.position += PickNextDirection() * step;
     }
 
-    // Génération alétoire de directions
+    // Random generation of directions
     public void SetupRandomDirections()
     {
         for(int i = 0; i < maxPathSize; i++)
@@ -77,14 +79,14 @@ public class ChickenMove : MonoBehaviour
         }
     }
 
-    // Récupération des directions de l'ADN (à partir de la 2ème génération)
+    // Extraction of the directions inside the DNA (doesn't apply to the 1st generation)
     public void SetupEstablishedDirections()
     {
         for (int i = 0; i < _pathInitialSize; i++)
             _path.Enqueue(_genetics.pathDNA[i]);
     }
 
-    // Application de la direction en tête de file chez le poulet
+    // Picking the first direction in the path queue (then dequeueing it)
     private Vector3 PickNextDirection()
     {
         string nextDirection = _path.Dequeue();
@@ -94,7 +96,7 @@ public class ChickenMove : MonoBehaviour
         return _directionsDictionary[nextDirection];
     }
 
-    // Calcul de la distance parcourue
+    // Calculation of the distance travelled by the chicken
     private void MeasureDistance()
     {
         distanceTravelled += Vector3.Distance(previousPosition, transform.position);

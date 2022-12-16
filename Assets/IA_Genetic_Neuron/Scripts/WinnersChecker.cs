@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class WinnersChecker : MonoBehaviour
 {
-    public int winnersCount; // nombre de poulets gagnants
-    public List<GameObject> winners; // liste des poulets gagnants
+    public int winnersCount; // Amount of winning chicken (those who reach the goal)
+    public List<GameObject> winners; // List of winners
 
     private UIManager _uiManager; // UI
 

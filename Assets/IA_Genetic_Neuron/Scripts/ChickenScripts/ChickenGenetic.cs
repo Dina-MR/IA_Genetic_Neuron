@@ -10,6 +10,7 @@ public class ChickenGenetic : MonoBehaviour
 {
     public float _fitnessScore; // Fitness score, used to select the best chicken
     [SerializeField] private float _mutationRate = 0.01f; // The chance a chicken will mutate
+    [SerializeField, Range(0, 1)] private float _crossingPickingChances = 0.6f; // The chance this chicken will get its DNA's segments chosen when breeding
     private bool _canMutate; // The ability or not for a chicken to mutate
     [HideInInspector] public List<string> pathDNA; // The path followed by the chicken is considered to be its DNA
     [HideInInspector] public Queue<string> currentPathDNA; // The current path generated. It'll reset itself when it gets empty
@@ -50,20 +51,30 @@ public class ChickenGenetic : MonoBehaviour
 
     public List<string> Crossbreed(GameObject partner)
     {
+        // Calculation of the DNA
         List<string> newDNA = new List<string>();
         List<string> partnerDNA = partner.GetComponent<ChickenGenetic>().pathDNA;
         int shortestDNASize = Math.Min(pathDNA.Count, partnerDNA.Count);
-        int randomDNAPickerLimit = UnityEngine.Random.Range(0, shortestDNASize); // we randomly choose which DNA will get its fragment picked, for each position of the new DNA
+        //int randomDNAPickerLimit = UnityEngine.Random.Range(0, shortestDNASize); // we randomly choose which DNA will get its fragment picked, for each position of the new DNA
         for(int i = 0; i < shortestDNASize; i++)
         {
-            if (i <= randomDNAPickerLimit)
+            float randomDNAPicker = UnityEngine.Random.Range(0, 1);
+            if (randomDNAPicker <=_crossingPickingChances)
                 newDNA.Add(pathDNA[i]);
             else
                 newDNA.Add(partnerDNA[i]);
+            //if (i <= randomDNAPickerLimit)
+            //    newDNA.Add(pathDNA[i]);
+            //else
+            //    newDNA.Add(partnerDNA[i]);
         }
+        //Debug.Log("New DNA size :" + newDNA.Count);
         return newDNA;
     }
 
+    /// <summary>
+    /// Checking if the chicken will mutate
+    /// </summary>
     public void DetermineMutation()
     {
         float randomValueForMutation = UnityEngine.Random.Range(0, 1);

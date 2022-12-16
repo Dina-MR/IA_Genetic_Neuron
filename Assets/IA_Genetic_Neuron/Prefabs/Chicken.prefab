@@ -812,7 +812,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48a497fe73065f249b9d97d696398c84, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _speed: 10
+  _speed: 15
   distanceTravelled: 0
   timer: 0
   maxPathSize: 0
@@ -846,6 +846,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _fitnessScore: 0
   _mutationRate: 0.01
+  _crossingPickingChances: 0.6
   pathDNA: []
 --- !u!1 &9016087692580001070
 GameObject:
